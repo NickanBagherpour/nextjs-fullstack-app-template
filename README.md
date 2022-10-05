@@ -301,3 +301,82 @@ Feel free to try some commits that *don't* follow the rules and see how they are
 [This documentation](https://nextjs.org/docs/advanced-features/debugging) explains how you can debug your Next.js frontend and backend code with full source maps support using either the VS Code debugger, the debugger in Jetbrains WebStorm
  or Chrome DevTools.
 
+
+## Adding Storybook
+
+One of the great modern tools available to us if you aren't already familiar with it is called [Storybook](https://storybook.js.org/).
+
+Storybook gives us an environment to show off and test the React components we are building outside of the application we are using them in.  It's  great tool to connect developers with designers and be able to verify components we have developed look and function as per design requirements in an isolated environment without the overhead of the rest of the app.
+
+Note that Storybook is meant as a visual testing tool, we will be implementing other tools later for functional unit testing and end-to-end testing.
+
+The best way to learn how to use Storybook is installing it and trying it out!
+
+```
+npx sb init --builder webpack5
+```
+
+We'll be using the webpack5 version to stay up to date with the latest version of webpack (I'm unsure why it is still not yet the default.  Maybe it will be by the time you are using this tutorial).
+
+When Storybook installs it automatically detects a lot of things about your project, like how it is a React app, and other tools you are using.  It should take care fo all that configuration itself.
+
+If you get a prompt about the eslintPlugin, you can say "yes".  We are going to configure it manually though, so no worries if you get a message saying it didn't auto-configure.
+
+Open up `.eslintrc.json` and update it to the following:
+
+`.eslintrc.json`
+```
+{
+  "extends": [
+    "plugin:storybook/recommended", // New
+    "next",
+    "next/core-web-vitals",
+    "eslint:recommended"
+  ],
+  "globals": {
+    "React": "readonly",
+  },
+  // New
+  "overrides": [
+    {
+      "files": ["*.stories.@(ts|tsx|js|jsx|mjs|cjs)"],
+      "rules": {
+        // example of overriding a rule
+        "storybook/hierarchy-separator": "error"
+      }
+    }
+  ],
+  "rules": {
+    "no-unused-vars": [1, { "args": "after-used", "argsIgnorePattern": "^_" }]
+  }
+}
+```
+
+I have added `// New` to mark the two new sections and lines that are Storybook specific.
+
+You'll notice that Storybook has also added as `/stories` directory to the root of your project with a number of examples in.  If you are new to Storybook I highly recommend you look through them and leave them there until you are comfortable creating your own without the templates.
+
+
+Before we run it we need to make sure we are using webpack5.  Add the following to your `package.json` file:
+
+`package.json`
+```
+{
+  ...
+  "resolutions": {
+    "webpack": "^5"
+  }
+}
+```
+
+Then run
+
+```
+ npm i     # yarn install
+```
+
+To ensure webpack5 is installed, and finally to run Storybook we run:
+
+```
+npm run storybook   # yarn storybook
+```
