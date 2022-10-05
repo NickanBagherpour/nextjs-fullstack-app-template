@@ -16,7 +16,13 @@ yarn install
 
 We will test to make sure the app is working.
 
-`npm run dev` or `yarn dev`
+```
+npm run dev
+```
+or 
+```
+yarn dev
+```
 
 You should see the demo app available on [http://localhost:3000](http://localhost:3000)
 
@@ -97,7 +103,13 @@ I find that scenario comes up often when you are working on a feature and want t
 
 You can test out your config by running:
 
-`npm run lint` or `yarn lint`
+```
+npm run lint
+```
+or 
+```
+yarn lint
+```
 
 If you get any errors then ESLint is quite good at explaining clearly what they are. If you encounter a rule you don't like you can disable it in "rules" by simply setting it to 1 (warning) or 0 (ignore) like so:
 
@@ -113,7 +125,13 @@ Prettier will take care of automatically formatting our files for us. Let's add 
 
 It's only needed during development, so I'll add it as a `devDependency` with `-D`
 
-`npm i -D prettier` or `yarn add -D prettier`
+```
+npm i -D prettier
+``` 
+or
+ ```
+ yarn add -D prettier
+ ```
 
 I also recommend you get the [Prettier VS Code extension](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) so that VS Code can handle the formatting of the files for you and you don't need to rely on the command line tool. Having it installed and configured in your project means that VSCode will use your project's settings, so it's still necessary to add it here.
 
@@ -142,3 +160,64 @@ node_modules
 ```
 
 In that file I've placed a list of directories that I don't want Prettier to waste any resources working on.  You can also use patterns like *.html to ignore groups of types of files if you choose.
+
+Now we add a new script to `package.json` so we can run Prettier:
+
+`package.json`
+```
+  ...
+  "scripts: {
+    ...
+    "prettier": "prettier --write ."
+  }
+```
+
+You can now run
+
+```
+npm run prettier
+```   
+or   
+```
+yarn prettier
+```
+
+to automatically format, fix and save all files in your project you haven't ignored.  By default my formatter updated about 5 files.  You can see them in your list of changed files in the source control tab on the left of VS Code.
+
+## Git Hooks
+
+One more section on configuration before we start getting into component development.  Remember you're going to want this project to be as rock solid as possible if you're going to be building on it in the long term, particularly with a team of other developers.  It's worth the time to get it right at the start.
+
+We are going to implement a tool called [Husky](https://typicode.github.io/husky/#/)
+
+Husky is a tool for running scripts at different stages of the git process, for example add, commit, push, etc.  We would like to be able to set certain conditions, and only allow things like commit and push to succeed if our code meets those conditions, presuming that it indicates our project is of acceptable quality.
+
+To install Husky run
+
+```
+npm i -D husky    # yarn add -D husky
+
+npx husky install
+```
+
+The second command will create a `.husky` directory in your project.  This is where your hooks will live.  Make sure this directory is included in your code repo as it's intended for other developers as well, not just yourself.
+
+Add the following script to your `package.json` file:
+
+`package.json`
+```
+  ...
+  "scripts: {
+    ...
+    "prepare": "husky install"
+  }
+```
+
+This will ensure Husky gets installed automatically when other developers run the project.  
+
+To create a hook run
+
+```
+npx husky add .husky/pre-commit "npm run lint"
+npx husky add .husky/pre-push "npm run build"
+```
