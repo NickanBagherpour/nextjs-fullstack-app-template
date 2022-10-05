@@ -60,3 +60,85 @@ Note that the use of `engine-strict` didn't specifically say anything about `yar
   },
   ...
 ```
+
+Note that from this point on we will be using the [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/#summary) standard and specifically the Angular convention [described here](https://github.com/angular/angular/blob/22b96b9/CONTRIBUTING.md#type)
+
+
+## Code Formatting and Quality Tools
+
+In order to set a standard that will be used by all contributors to the project to keep the code style consistent and basic best practices followed we will be implementing two tools:
+
+- [eslint](https://eslint.org/) - For best practices on coding standards
+- [prettier](https://prettier.io/) - For automatic formatting of code files
+
+### ESLint
+
+We'll begin with ESLint, which is easy because it automatically comes installed and pre-configured with NextJs projects.
+
+We are just going to add a little of extra configuration and make it a bit stricter than it is by default. If you disagree with any of the rules it sets, no need to worry, it's very easy to disable any of them manually. We configure everything in `.eslintrc.json` which should already exist in your root directory:
+
+`.eslintrc.json`
+
+```json
+{
+  "extends": ["next", "next/core-web-vitals", "eslint:recommended"],
+  "globals": {
+    "React": "readonly"
+  },
+  "rules": {
+    "no-unused-vars": [1, { "args": "after-used", "argsIgnorePattern": "^_" }]
+  }
+}
+```
+
+In the above small code example we have added a few additional defaults, we have said that `React` will always be defined even if we don't specifically import it, and I have added a personal custom rule that I like which allows you to prefix variables with an underscore \_ if you have declared them but not used them in the code.
+
+I find that scenario comes up often when you are working on a feature and want to prepare variables for use later, but have not yet reached the point of implementing them.
+
+You can test out your config by running:
+
+`npm run lint` or `yarn lint`
+
+If you get any errors then ESLint is quite good at explaining clearly what they are. If you encounter a rule you don't like you can disable it in "rules" by simply setting it to 1 (warning) or 0 (ignore) like so:
+
+```
+  "rules": {
+    "no-unused-vars": 0, // As example: Will never bug you about unused variables again
+  }
+```
+
+### Prettier
+
+Prettier will take care of automatically formatting our files for us. Let's add it to the project now.
+
+It's only needed during development, so I'll add it as a `devDependency` with `-D`
+
+`npm i -D prettier` or `yarn add -D prettier`
+
+I also recommend you get the [Prettier VS Code extension](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) so that VS Code can handle the formatting of the files for you and you don't need to rely on the command line tool. Having it installed and configured in your project means that VSCode will use your project's settings, so it's still necessary to add it here.
+
+We'll create two files in the root:
+
+`.prettierrc`
+```.prettierrc
+{
+  "trailingComma": "es5",
+  "tabWidth": 2,
+  "semi": true,
+  "singleQuote": true
+}
+```
+
+Those values are entirely at your discretion as to what is best for your team and project.
+
+`.prettierignore`
+```
+.yarn
+.vscode
+.next
+dist
+node_modules
+*.md
+```
+
+In that file I've placed a list of directories that I don't want Prettier to waste any resources working on.  You can also use patterns like *.html to ignore groups of types of files if you choose.
