@@ -221,3 +221,77 @@ To create a hook run
 npx husky add .husky/pre-commit "npm run lint"
 npx husky add .husky/pre-push "npm run build"
 ```
+
+The above ensures that we are not allowed to push to the remote repository unless our code can successfully build.  That seems like a pretty reasonable condition doesn't it?  Feel free to test it by committing this change and trying to push.
+
+---
+
+Lastly we are going to add one more tool.  We have been following a standard convention for all our commit messages so far, let's ensure that everyone on the team is following them as well (including ourselves!).  We can add a linter for our commit messages:
+
+```
+yarn add -D @commitlint/config-conventional @commitlint/cli
+```
+
+To configure it we will be using a set of standard defaults, but I like to include that list explicitly in a `commitlint.config.js` file since I sometimes forget what prefixes are available:
+
+`commitlint.config.js`
+```js
+// build: Changes that affect the build system or external dependencies (example scopes: gulp, broccoli, npm)
+// ci: Changes to our CI configuration files and scripts (example scopes: Travis, Circle, BrowserStack, SauceLabs)
+// docs: Documentation only changes
+// feat: A new feature
+// fix: A bug fix
+// perf: A code change that improves performance
+// refactor: A code change that neither fixes a bug nor adds a feature
+// style: Changes that do not affect the meaning of the code (white-space, formatting, missing semi-colons, etc)
+// test: Adding missing tests or correcting existing tests
+
+module.exports = {
+  extends: ['@commitlint/config-conventional'],
+  rules: {
+    'body-leading-blank': [1, 'always'],
+    'body-max-line-length': [2, 'always', 100],
+    'footer-leading-blank': [1, 'always'],
+    'footer-max-line-length': [2, 'always', 100],
+    'header-max-length': [2, 'always', 100],
+    'scope-case': [2, 'always', 'lower-case'],
+    'subject-case': [
+      2,
+      'never',
+      ['sentence-case', 'start-case', 'pascal-case', 'upper-case'],
+    ],
+    'subject-empty': [2, 'never'],
+    'subject-full-stop': [2, 'never', '.'],
+    'type-case': [2, 'always', 'lower-case'],
+    'type-empty': [2, 'never'],
+    'type-enum': [
+      2,
+      'always',
+      [
+        'build',
+        'chore',
+        'ci',
+        'docs',
+        'feat',
+        'fix',
+        'perf',
+        'refactor',
+        'revert',
+        'style',
+        'test',
+        'translation',
+        'security',
+        'changeset',
+      ],
+    ],
+  },
+};
+```
+
+Then add `commit-msg` hook like below
+
+```
+npx husky add .husky/commit-msg  "npx --no -- commitlint --edit ${1}"
+```
+
+Feel free to try some commits that *don't* follow the rules and see how they are not accepted, and you receive feedback that is designed to help you correct them. more info about commitlint click [here](https://commitlint.js.org/#/)
