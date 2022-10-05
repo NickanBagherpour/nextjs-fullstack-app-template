@@ -295,3 +295,9 @@ npx husky add .husky/commit-msg  "npx --no -- commitlint --edit ${1}"
 ```
 
 Feel free to try some commits that *don't* follow the rules and see how they are not accepted, and you receive feedback that is designed to help you correct them. more info about commitlint click [here](https://commitlint.js.org/#/)
+
+### Debugging
+
+[This documentation](https://nextjs.org/docs/advanced-features/debugging) explains how you can debug your Next.js frontend and backend code with full source maps support using either the VS Code debugger, the debugger in Jetbrains WebStorm
+ or Chrome DevTools.
+
