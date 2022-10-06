@@ -1,17 +1,30 @@
-import CatCard from '../components/cards/cat/CatCard';
-import { mockCatCardProps } from '../components/cards/cat/CatCard.mocks';
+import Image from 'next/image';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+
 import PrimaryLayout from '../components/layouts/primary/PrimaryLayout';
-import SidebarLayout from '../components/layouts/sidebar/SidebarLayout';
-import styles from '../styles/Home.module.css';
+import Search from '../components/utility/search/Search';
 import { NextPageWithLayout } from './page';
 
 const Home: NextPageWithLayout = () => {
+  const { locale } = useRouter();
+
   return (
-    <section className={styles.main}>
-      <h1 className={styles.title}>
-        Welcome to <a href="https://nextjs.org">Next.js!</a>
-      </h1>
-      <CatCard {...mockCatCardProps.base} />
+    <section className="flex flex-col items-center gap-y-5 mt-12 sm:mt-36">
+      <Image
+        src="/google.png"
+        alt="Google Logo"
+        width={272}
+        height={92}
+        priority
+      />
+      <Search />
+      <p>
+        Google offered in:{' '}
+        <Link href="/" locale={locale === 'en' ? 'fa' : 'en'}>
+          <a className="underline text-blue-600"> فارسی</a>
+        </Link>
+      </p>
     </section>
   );
 };
@@ -19,10 +32,5 @@ const Home: NextPageWithLayout = () => {
 export default Home;
 
 Home.getLayout = (page) => {
-  return (
-    <PrimaryLayout>
-      <SidebarLayout />
-      {page}
-    </PrimaryLayout>
-  );
+  return <PrimaryLayout>{page}</PrimaryLayout>;
 };
