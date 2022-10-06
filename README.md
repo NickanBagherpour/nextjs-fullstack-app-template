@@ -380,3 +380,17 @@ To ensure webpack5 is installed, and finally to run Storybook we run:
 ```
 npm run storybook   # yarn storybook
 ```
+
+## Tailwind CSS (with PostCSS , Autoprefixer)
+
+Tailwind CSS works by scanning all of your HTML files, JavaScript components, and any other templates for class names, generating the corresponding styles and then writing them to a static CSS file.
+
+Installing Tailwind CSS as a PostCSS plugin is the most seamless way to integrate it with build tools like webpack, Rollup, Vite, and Parcel.
+
+[Get started with Tailwind CSS](https://tailwindcss.com/docs/installation/using-postcss)
+```
+npm install -D tailwindcss postcss autoprefixer
+npx tailwindcss init -p
+```
+Last command will generate your `tailwind.config.js` and `postcss.config.js` files.
+
