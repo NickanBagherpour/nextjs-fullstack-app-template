@@ -12,7 +12,7 @@ module.exports = {
       lg: '1200px',
       xl: '1536px',
     },
-    /*     fontFamily: {
+    fontFamily: {
       sans: ['Arial', 'sans-serif'],
       serif: ['Garamond', 'serif'],
     },
@@ -25,7 +25,8 @@ module.exports = {
       spacing: {
         128: '32rem',
       },
-    }, */
+    },
   },
   plugins: [],
 };
+
