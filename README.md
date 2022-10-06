@@ -394,3 +394,48 @@ npx tailwindcss init -p
 ```
 Last command will generate your `tailwind.config.js` and `postcss.config.js` files.
 
+## Storybook Support for Tailwind
+
+Start by adding the PostCSS addon for Storybook:
+
+```
+npm install -D @storybook/addon-postcss
+```
+
+OPTIONAL: If you want to keep using CSS modules as well:
+
+```
+npm install -D storybook-css-modules-preset
+```
+
+Then update your `.storybook/main.js` file to:
+
+```js
+module.exports = {
+  stories: ['../**/*.stories.mdx', '../**/*.stories.@(js|jsx|ts|tsx)'],
+  /** Expose public folder to storybook as static */
+  staticDirs: ['../public'],
+  addons: [
+    '@storybook/addon-links',
+    '@storybook/addon-essentials',
+    '@storybook/addon-interactions',
+    'storybook-css-modules-preset',
+    {
+      /**
+       * Fix Storybook issue with PostCSS@8
+       * @see https://github.com/storybookjs/storybook/issues/12668#issuecomment-773958085
+       */
+      name: '@storybook/addon-postcss',
+      options: {
+        postcssLoaderOptions: {
+          implementation: require('postcss'),
+        },
+      },
+    },
+  ],
+  framework: '@storybook/react',
+  core: {
+    builder: '@storybook/builder-webpack5',
+  },
+};
+```
